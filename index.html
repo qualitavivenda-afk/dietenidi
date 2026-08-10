@@ -566,19 +566,24 @@ async function esportaRegistroExcel(){
   const wb = new ExcelJS.Workbook();
   const ws = wb.addWorksheet('Registro diete nidi');
   ws.columns = [
-    {header:'Data/Ora', key:'dataOra', width:18},
-    {header:'Fascia', key:'fascia', width:20},
-    {header:'Dieta', key:'dieta', width:26},
-    {header:'Stagione', key:'stagione', width:12},
-    {header:'Nido', key:'nido', width:22},
-    {header:'Classe e sez.', key:'classe', width:16},
     {header:'Cognome', key:'cognome', width:22},
-    {header:'N prot.', key:'nprot', width:12},
-    {header:'Data prot.', key:'dataprot', width:12},
+    {header:'Sez.', key:'classe', width:16},
+    {header:'Scuola', key:'nido', width:22},
+    {header:'Tipo dieta', key:'dieta', width:26},
+    {header:'N° prot.', key:'nprot', width:14},
+    {header:'Data prot.', key:'dataprot', width:14},
+    {header:'Data/Ora', key:'dataOra', width:20},
   ];
-  ws.getRow(1).font = { bold:true, color:{argb:'FF00274D'} };
-  ws.getRow(1).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFD6E2F0'} };
-  registroCache.forEach(r=>ws.addRow(r));
+  ws.getRow(1).font = { bold:true, color:{argb:'FF000000'} };
+  ws.getRow(1).border = { bottom:{style:'thin', color:{argb:'FF000000'}} };
+  registroCache.forEach((r, i)=>{
+    const row = ws.addRow(r);
+    if(i % 2 === 1){
+      row.eachCell({includeEmpty:true}, cell=>{
+        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFE8EEF6'} };
+      });
+    }
+  });
   const buffer = await wb.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   const url = URL.createObjectURL(blob);
