@@ -520,7 +520,10 @@ document.getElementById('btn-stampa').addEventListener('click', ()=>{
   const confermato = window.confirm(`Confermi la stampa/salvataggio PDF con questi dati?\n\n${riepilogo}`);
   if(!confermato) return;
   registraGenerazione(dati);
+  const titoloOriginale = document.title;
+  document.title = costruisciNomeFile(dati);
   window.print();
+  document.title = titoloOriginale;
 });
 
 // ============ REGISTRO ============
